@@ -1,4 +1,6 @@
-import React from 'react'
+"use client"
+
+import React, { useState, useEffect } from 'react'
 
 import Image from "next/image";
 
@@ -6,6 +8,22 @@ import Link from "next/link";
 
 import Logo from "../assets/DonorGirlz.png"
 import DonorBg from "../assets/DonationBg.jpg"
+
+const Card = (props: any) => {
+    const { entry: { name, location, numberOfGirls, phoneNumber } } = props
+
+    return (
+        <div className="flex gap-4 mt-5 w-[400px]">
+            <div className="justify-between h-[250px] max-w-[400px] border hover:translate-y-1 transition-all w-full p-4 rounded-md">
+                <div>{name}</div>
+                <div>{location}</div>
+                <div>{phoneNumber}</div>
+                <div>{`${numberOfGirls} girls`}</div>
+                <div onClick={() => props?.handleDonate()} className="mt-4 mr-3 bg-purple-800 p-3 rounded-md hover:opacity-50 cursor-pointer">Donate</div>
+            </div>
+        </div>
+    )
+}
 
 const PageHeader = () => {
     return (
@@ -21,7 +39,7 @@ const PageHeader = () => {
                     <div className="mr-3">Login</div>
                 </Link>
                 <Link href="/donate">
-                    <div className="mr-3 bg-purple-800 p-3 rounded-md hover:opacity-50">Donate</div>
+                    <div className="mr-3 bg-purple-800 p-3 rounded-md hover:opacity-50 cursor-pointer">Donate</div>
                 </Link>
             </div>
         </div>
@@ -29,16 +47,41 @@ const PageHeader = () => {
 }
 
 const PageContent = () => {
+    const [institutions, setInstitution] = useState<any>([])
+    const [open, setOpen] = useState<boolean>(false)
+
+    const handleDonate = (entry: any) => {
+        setOpen(true)
+    }
+
+    useEffect(() => {
+        const fetchInstitutions = async () => {
+            const response = await fetch('http://localhost:1337/api/institutions')
+            const res = await response.json()
+            const data = res?.data
+            const massagedData = data?.map((entry: any) => entry?.attributes)
+
+            console.log("Massaged Data", massagedData)
+            setInstitution(massagedData)
+        }
+
+        fetchInstitutions()
+    }, [])
+
+    console.log("Massaged Data ==> institutions", institutions)
+
     return (
-        <div className="flex justify-center my-auto flex-col items-center">
-            <div className="text-3xl mb-2">Donate Now</div>
-            <form className="border flex flex-col w-full">
-                <input type="text" placeholder="Enter Name" className="bg-gray-400 placeholder:text-black mb-2 p-4 focus:outline-none" />
-                <input type="text" placeholder="Enter Phone Number" className="bg-gray-400 placeholder:text-black mb-2 p-4 focus:outline-none" />
-                <input type="text" placeholder="Enter Number of Pads" className="bg-gray-400 placeholder:text-black mb-2 p-4 focus:outline-none" />
-                <div className="bg-purple-800 p-3 rounded-md hover:opacity-50 w-[100px] text-center">Donate</div>
-            </form>
-        </div>
+        <>
+            {
+                open
+                    ? <div className="border">
+
+                    </div>
+                    : <div className="flex justify-between gap-4">
+                        {institutions?.map((entry: any) => <Card key={Math.random()} entry={entry} handleDonate={() => handleDonate(entry)} />)}
+                    </div>
+            }
+        </>
     )
 }
 
