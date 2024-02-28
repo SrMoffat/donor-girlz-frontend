@@ -1,8 +1,11 @@
+import React from 'react'
+
 import Image from "next/image";
+
 import Link from "next/link";
 
-import Logo from "./assets/DonorGirlz.png"
-import DonorBg from "./assets/DonationBg.jpg"
+import Logo from "../assets/DonorGirlz.png"
+import DonorBg from "../assets/DonationBg.jpg"
 
 const PageHeader = () => {
   return (
@@ -27,20 +30,8 @@ const PageHeader = () => {
 
 const PageContent = () => {
   return (
-    <div>
-      <div className="flex justify-center">
-        <div className="w-full">
-          <Image src={DonorBg} width={800} height={100} alt="DonorGirlz" />
-        </div>
-        <div className="w-full ml-4 flex text-xl items-center">
-          <span>
-            The <span className="text-purple-500 font-bold">happiness</span> is giving it away.
-            The more you give the more you receive.
+    <div className="border border-white">
 
-            Every month, millions of girls around the world face a challenging reality: they lack access to menstrual hygiene products. For these girls, managing their periods is not just an inconvenience; it's a barrier to education, dignity, and opportunity.
-          </span>
-        </div>
-      </div>
     </div>
   )
 }
@@ -53,7 +44,7 @@ const PageFooter = () => {
   )
 }
 
-export default function Home() {
+const RegisterPage = () => {
   return (
     <>
       <main className="flex flex-col min-h-screen justify-start max-w-7xl w-full mx-auto pt-8">
@@ -62,5 +53,7 @@ export default function Home() {
       </main>
       <PageFooter />
     </>
-  );
+  )
 }
+
+export default RegisterPage
